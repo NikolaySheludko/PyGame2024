@@ -1,0 +1,178 @@
+# coding: utf8
+import pygame
+import random
+def load_menu():
+    items = [(160, 140, 'Game', (0, 0, 0), (255, 0, 0), 0, 160, 100, 'Quit', (0,0,0), (654, 0, 0, 0), 1)]
+    # создать вторую кнопку]
+
+    pygame.mouse.set_visible(True)
+
+    done = False
+    item = 0
+    while not done:
+        # закрасить фон полностью (screen и score)
+        screen.fill([131, 35, 35])
+        score.fill([131, 35, 35])
+
+        for e in pygame.event.get():
+                if e.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+                if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
+                    if item == 0:
+                        done = True
+                    elif item == 1:
+                        pygame.quit()
+                    sys.exit()
+                        # отключаем pygame
+                        # закрываем окно
+
+        pointer = pygame.mouse.get_pos()
+        for i in items:
+            if pointer[0]>i[0] and pointer[0]<i[0]+155 and pointer[1]>i[1] and pointer[1]<i[1]+50:
+                item = i[5]
+
+        for i in items:
+            if item == i[5]:
+                screen.blit(myFont.render(i[2], 1, i[4]), [i[0], i[1]-40])
+            else:
+                screen.blit(myFont.render(i[2], 1, i[3]), [i[0], i[1]-40])
+                
+            window.blit(screen, [0,40])
+            window.blir(screen, [0,0])
+            pygame.display.flip()
+            
+        # отобразить score и screen на window
+        # обновить дисплей
+
+
+count=0
+x_user=int (input())
+y_user=int (input())
+step=5
+enemy_new=True
+# задааем размер окна, создаем окно размера size
+size = [400, 400]
+window = pygame.display.set        _mode(size)
+# задаем имя - в кавычках, т.к. текст - это строка
+pygame.display.set_caption('My Summer Car')
+window = pygame.display.set_mode([400,400]
+screen = pygame.Surface([400,440])
+score -= pygame.Surface([400,40])
+                                 
+screen = pygame.Surface(size)
+step=1
+class Sprite:
+    def __init__(self, xpos, ypos, filename):
+        self.x = xpos
+        self.y = ypos
+        self.bitmap = pygame.image.load(filename)
+    def render(self):
+        screen.blit(self.bitmap,(self.x, self.y))
+
+
+def Intersect(s1_x, s2_x, s1_y, s2_y):
+    if ((s1_x>s2_x-40) and (s1_x<s2_x+40) and (s1_y>s2_y-40) and (s1_y<s2_y+40)):
+        return 1
+    else:
+        return 0
+
+# создание персонажей
+# герой
+
+# переменные-"переключатели" движения для героя
+hero = Sprite(x_user,y_user, 'mg1.jpg')
+hero.right = True
+hero.up = True
+
+running = True
+pygame.key.set_repeat(1,1)
+# враг
+enemy = Sprite(200, 10, 'mg51.jpg')
+
+# переменные-"переключатели" движения для врага
+enemy.right = False
+enemy.up = False
+bomba =Sprite(-200, -2000, 'Fire02.jpg')
+bomba.up=True
+
+
+
+bad_screen = False
+count = 0
+running = True
+
+enemy_new = True
+
+while running:
+    # обработка событий
+    for e in pygame.event.get():
+        
+          if e.type == pygame.KEYDOWN:
+              if e.type == pygame.QUIT:
+                running  = False
+              if e.key==pygame.K_LEFT and hero.x > 0:
+                 hero.x-=3
+              if e.key==pygame.K_RIGHT and hero.x < 400-30:
+                 hero.x+=3
+              if e.key==pygame.K_UP and hero.y > 200:
+                 hero.y-=3
+              if e.key==pygame.K_DOWN and hero.y < 400-30:
+                 hero.y+=3
+              if e.key==pygame.K_SPACE:
+                 bomba.x=hero.x
+                 bomba.y=hero.y
+                 bomba.up=True
+    # задайте фоновый цвет
+    screen.fill([200, 138, 200])
+
+    # движение персонажей - аналогично тому,
+    # что делали с квадратом, но теперь по вертикали
+    #if hero.up == True:
+       # hero.y -= 50
+        #if hero.y < 0:
+          #  hero.up = False
+    #else:
+       # hero.y += 3
+        #if hero.y > 360:
+            #hero.up = True
+    if enemy.right==True:
+        
+        if enemy.x <360:
+            enemy.x+=step
+        else:
+            enemy.right=False
+    if enemy.right==False: 
+    
+        if enemy.x>0:
+            enemy.x-=step
+           
+           
+        else:
+            enemy.right=True
+    if bomba.up==True:
+       bomba.y-=6
+           
+               
+    if Intersect(bomba.x, enemy.x, bomba.y,enemy.y):
+        step+=0.5
+        bomba.x=-400
+        bomba.y=-400
+
+
+
+    # отображение персонажей
+    hero.render()
+    enemy.render()
+    bomba.render()
+    
+
+    # отображение окна
+    window.blit(screen, [0, 0])
+    pygame.display.flip()
+    pygame.time.delay(50)
+
+
+pygame.quit()
+
